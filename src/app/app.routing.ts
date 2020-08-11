@@ -4,6 +4,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import {LoginComponent} from "./pages/login/login.component";
 import {RegisterComponent} from "./pages/register/register.component";
 import {AuthGuardService} from "./guard/auth-guard.service";
+import {ProductsComponent} from "./pages/products/products.component";
 
 export const AppRoutes: Routes = [
   {
@@ -13,6 +14,10 @@ export const AppRoutes: Routes = [
     path: 'register',
     component: RegisterComponent
   }, {
+    path: 'products',
+    component: ProductsComponent
+  },
+  {
     path: '',
     canActivate: [AuthGuardService],
     component: AdminLayoutComponent,

@@ -17,7 +17,10 @@ import { RegisterComponent } from './pages/register/register.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptor/auth.interceptor";
 import {AuthGuardService} from "./guard/auth-guard.service";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { ProductsComponent } from './pages/products/products.component';
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatTableModule} from "@angular/material/table";
 
 
 @NgModule({
@@ -25,7 +28,8 @@ import {FormsModule} from "@angular/forms";
     AppComponent,
     AdminLayoutComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ProductsComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -38,7 +42,10 @@ import {FormsModule} from "@angular/forms";
     ToastrModule.forRoot(),
     FooterModule,
     FixedPluginModule,
-    FormsModule
+    FormsModule,
+    MatPaginatorModule,
+    MatTableModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthGuardService,

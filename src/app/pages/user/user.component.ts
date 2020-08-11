@@ -12,11 +12,10 @@ import {User} from "../../model/User";
 export class UserComponent implements OnInit{
     constructor(private userService: UserService, private authService: AuthService) {
     }
-    user: User;
+    user: User = new User();
     ngOnInit() {
       let userName = this.authService.userValue.userName;
       this.userService.getUserInfo(userName).subscribe((userData: User) => {
-        console.log(userData);
         this.user = userData;
       })
     }

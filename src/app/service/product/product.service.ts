@@ -1,19 +1,23 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
-import {AuthService} from "../auth/auth.service";
-import {User} from "../../model/User";
+import {filter} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient) { }
 
-  getOrdersLoggedUser() {
-    let loggedUser: User = this.authService.userValue;
-    let userOrdersLink: string = loggedUser._links.orders.href;
-    return this.http.get(userOrdersLink);
+  getProducts(page: number, size: number, filters: any) {
+    let params = new HttpParams()
+      .append('page', String(page))
+      .append('with', String(filters.with))
+      .append('size', String(size));
+
+    console.log(filters)
+
+    return this.http.get(`${environment.apiUrl}/api/products/search/nameStartWith`, {params: params});
   }
 }

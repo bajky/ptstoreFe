@@ -5,13 +5,24 @@
         <div class="card-header">
           <h5 class="card-title">Login</h5>
         </div>
+        <div *ngIf="loginError" class="alert alert-danger alert-dismissible fade show">
+          <button (click)="closeErrorMsg()" type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="nc-icon nc-simple-remove"></i>
+          </button>
+          <span style="white-space: nowrap">
+                <b> Invalid user name or password </b>
+          </span>
+        </div>
         <div class="card-body">
-          <form>
+          <form [formGroup]="formGrp" (ngSubmit)="onLogin()">
             <div class="row d-flex justify-content-center">
               <div class="col-md-6 pr-1">
                 <div class="form-group">
                   <label>User Name</label>
-                  <input [(ngModel)]="user.userName" name="user" type="text" class="form-control">
+                  <input formControlName="userName" name="user" type="text" class="form-control">
+                  <div *ngIf="isFieldValid('userName')" style="color: red">
+                    Name is required.
+                  </div>
                 </div>
               </div>
             </div>
@@ -19,13 +30,16 @@
               <div class="col-md-6 pr-1">
                 <div class="form-group">
                   <label>Password</label>
-                  <input [(ngModel)]="user.password" name="password" type="password" class="form-control">
+                  <input formControlName="password" name="password" type="password" class="form-control">
+                  <div *ngIf="isFieldValid('password')" style="color: red">
+                    Name is required.
+                  </div>
                 </div>
               </div>
             </div>
             <div class="row">
               <div class="update ml-auto mr-auto">
-                <button type="button" (click)="onLogin()" class="btn btn-primary btn-round">Login</button>
+                <button type="submit" class="btn btn-primary btn-round">Login</button>
               </div>
             </div>
           </form>

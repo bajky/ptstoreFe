@@ -11,8 +11,7 @@ import {Resource} from "../../model/Resource";
     moduleId: module.id,
     templateUrl: 'table.component.html'
 })
-
-export class TableComponent implements OnInit{
+export class TableComponent implements OnInit {
 
     displayedColumns: string[] = ['time', 'totalPrice'];
     page = {
