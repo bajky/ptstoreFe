@@ -5,8 +5,11 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {environment} from "../../../environments/environment";
 import {Product} from "../../model/Product";
-import {Observable, Subject, Subscription} from "rxjs";
-import {debounce, debounceTime, distinctUntilChanged} from "rxjs/operators";
+import {Subject} from "rxjs";
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
+import {OrderService} from "../../service/order/order.service";
+import {AuthService} from "../../service/auth/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-products',
@@ -14,8 +17,10 @@ import {debounce, debounceTime, distinctUntilChanged} from "rxjs/operators";
 })
 export class ProductsComponent implements OnInit {
 
+  products: string[] = [];
   changed = new Subject<string>();
-  displayedColumns: string[] = ['productName', 'price', 'description'];
+  displayedColumns: string[] = ['productName', 'price', 'category', 'description'];
+  dynamicColumns = ['actions', 'amount']
   page = {
     pageIndex:0,
     pageSize:0,
@@ -26,22 +31,29 @@ export class ProductsComponent implements OnInit {
     with: ''
   }
 
+  showDanger = false;
+  showInfo = false;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private productService: ProductService,
-              private changeDetectorRefs: ChangeDetectorRef) { }
+              private changeDetectorRefs: ChangeDetectorRef,
+              private orderService: OrderService,
+              private router: Router,
+              private authService: AuthService) { }
 
   ngOnInit(): void {
+    console.log(this.router.url.indexOf('dashbosard'));
     this.dataSource = new MatTableDataSource<Product>();
     this.getData(0, environment.defaultPageSize);
-
+    if (this.authService.isAuthenticated()) {
+      this.dynamicColumns.forEach(column => this.displayedColumns.push(column));
+    }
     this.changed
       .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe(() => this.getData(0, this.page.pageSize));
   }
 
   getData(page:number, size: number) {
-    console.log(size);
-    console.log(page);
     this.productService.getProducts(page, size, this.filters).subscribe((resource: Resource) => {
       this.dataSource = new MatTableDataSource<Product>(resource._embedded.products);
       this.changeDetectorRefs.detectChanges();
@@ -58,5 +70,27 @@ export class ProductsComponent implements OnInit {
 
   onFilterChange(event) {
     this.changed.next(event);
+  }
+
+  addToBasket(productUrl: string) {
+    this.products.push(productUrl);
+  }
+
+  createOrder() {
+    this.orderService.createOrder(this.products).subscribe((data: Resource) => {
+      this.showInfo = true;
+    }, (error) => this.showDanger = true);
+  }
+
+  getAmountByUrl(productUri): number {
+    return this.products.filter(item => item == productUri).length;
+  }
+
+  closeDanger() {
+    this.showDanger = false;
+  }
+
+  closeInfo() {
+    this.showInfo = false;
   }
 }

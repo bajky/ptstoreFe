@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {AuthService} from "../auth/auth.service";
 import {User} from "../../model/User";
 import {environment} from "../../../environments/environment";
@@ -21,9 +21,22 @@ export class OrderService {
       .append('size', String(size))
       .append('user', userLink);
 
-    console.log(params);
-
-    console.log(`${environment.apiUrl}/api/orders/search/byUser`);
     return this.http.get(`${environment.apiUrl}/api/orders/search/byUser`, {params: params});
+  }
+
+  createOrder(products: string[]) {
+    let loggedUser: User = this.authService.userValue;
+    let userLink: string = loggedUser._links.self.href;
+
+    let order = {
+      user: userLink,
+      time: new Date(),
+      products: products
+    }
+
+    let headers = new HttpHeaders()
+      .append('Content-Type', 'application/hal+json')
+
+    return this.http.post(`${environment.apiUrl}/api/orders/`, order, {headers: headers});
   }
 }

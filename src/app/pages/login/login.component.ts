@@ -3,6 +3,7 @@ import {AuthService} from "../../service/auth/auth.service";
 import {Router} from "@angular/router";
 import {User} from "../../model/User";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {ValidationService} from "../../service/validation/validation.service";
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,8 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router,
+              private validationService: ValidationService) { }
 
   formGrp: FormGroup;
   loginError = false;
@@ -34,7 +36,7 @@ export class LoginComponent implements OnInit {
     let userName = this.formGrp.get('userName').value;
     let password = this.formGrp.get('password').value;
 
-    this.validateAllFormFields(this.formGrp);
+    this.validationService.validateAllFormFields(this.formGrp);
     if (!this.formGrp.valid) {
       return;
     }
@@ -42,22 +44,10 @@ export class LoginComponent implements OnInit {
     this.authService.login(userName, password)
       .subscribe(() => {
           this.router.navigate(['dashboard']);
-      }, () => this.loginError = true);
-  }
-
-  validateAllFormFields(formGroup: FormGroup) {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
-      }
-    });
-  }
-
-  isFieldValid(field: string) {
-    return !this.formGrp.get(field).valid && this.formGrp.get(field).touched;
+      }, () => {
+        this.loginError = true;
+        this.formGrp.reset();
+      });
   }
 
   closeErrorMsg() {

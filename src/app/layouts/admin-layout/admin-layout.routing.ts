@@ -9,15 +9,15 @@ import { NotificationsComponent } from '../../pages/notifications/notifications.
 import { UpgradeComponent } from '../../pages/upgrade/upgrade.component';
 import {LoginComponent} from "../../pages/login/login.component";
 import {RegisterComponent} from "../../pages/register/register.component";
+import {ProductsComponent} from "../../pages/products/products.component";
 
 export const AdminLayoutRoutes: Routes = [
-    { path: 'dashboard',      component: DashboardComponent },
+    {
+      path: '',
+      component: DashboardComponent
+    },
     { path: 'user',           component: UserComponent },
     { path: 'table',          component: TableComponent },
-    { path: 'typography',     component: TypographyComponent },
-    // { path: 'icons',          component: IconsComponent },
-    { path: 'notifications',  component: NotificationsComponent },
-    { path: 'upgrade',        component: UpgradeComponent },
-    { path: 'register',       component: RegisterComponent },
-    { path: 'login',          component: LoginComponent }
+    { path: 'products',       component: ProductsComponent },
+    { path: 'notifications',       component: NotificationsComponent }
 ];

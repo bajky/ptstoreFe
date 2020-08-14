@@ -23,6 +23,10 @@ export class AuthService {
     return this.userSubject.value;
   }
 
+  isAuthenticated() {
+    return localStorage.getItem('user') != null;
+  }
+
   login(userName: string, password: string) {
     let token: string = window.btoa(userName + ':' + password);
     return this.http.get<any>(`${environment.apiUrl}/api/users/search/findByUserName?userName=${userName}`, {headers: {Authorization: `Basic ${token}`}})

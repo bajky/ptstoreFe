@@ -23,7 +23,7 @@ export const AppRoutes: Routes = [
     component: AdminLayoutComponent,
     children: [
       {
-        path: '',
+        path: 'dashboard',
         loadChildren: './layouts/admin-layout/admin-layout.module#AdminLayoutModule'
       }]
   },

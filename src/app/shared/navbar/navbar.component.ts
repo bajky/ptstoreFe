@@ -34,6 +34,7 @@ export class NavbarComponent implements OnInit{
           this.sidebarClose();
        });
     }
+
     getTitle(){
       var titlee = this.location.prepareExternalUrl(this.location.path());
       if(titlee.charAt(0) === '#'){
@@ -44,8 +45,7 @@ export class NavbarComponent implements OnInit{
               return this.listTitles[item].title;
           }
       }
-      console.log('here')
-      return 'Dashboard';
+      return '';
     }
     sidebarToggle() {
         if (this.sidebarVisible === false) {

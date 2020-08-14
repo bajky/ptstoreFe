@@ -16,8 +16,6 @@ export class ProductService {
       .append('with', String(filters.with))
       .append('size', String(size));
 
-    console.log(filters)
-
     return this.http.get(`${environment.apiUrl}/api/products/search/nameStartWith`, {params: params});
   }
 }
