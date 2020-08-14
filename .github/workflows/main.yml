@@ -1,5 +1,9 @@
 name: Autocloser
-on: [issues]
+on:
+  push:
+    branches:
+      - 'master'
+
 jobs:
   autoclose:
     runs-on: ubuntu-latest
