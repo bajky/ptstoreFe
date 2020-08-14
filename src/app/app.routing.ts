@@ -5,17 +5,21 @@ import {LoginComponent} from "./pages/login/login.component";
 import {RegisterComponent} from "./pages/register/register.component";
 import {AuthGuardService} from "./guard/auth-guard.service";
 import {ProductsComponent} from "./pages/products/products.component";
+import {LoginGuardService} from "./guard/login-guard.service";
 
 export const AppRoutes: Routes = [
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [LoginGuardService]
   }, {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [LoginGuardService]
   }, {
     path: 'products',
-    component: ProductsComponent
+    component: ProductsComponent,
+    canActivate: [LoginGuardService]
   },
   {
     path: '',

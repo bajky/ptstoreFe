@@ -1,4 +1,4 @@
-name: Autocloser
+name: DockerHub publisher
 on:
   push:
     branches:

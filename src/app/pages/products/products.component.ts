@@ -76,6 +76,11 @@ export class ProductsComponent implements OnInit {
     this.products.push(productUrl);
   }
 
+  removeFromBasket(productUrl: string) {
+    let index = this.products.indexOf(productUrl);
+    this.products.splice(index, 1);
+  }
+
   createOrder() {
     this.orderService.createOrder(this.products).subscribe((data: Resource) => {
       this.showInfo = true;

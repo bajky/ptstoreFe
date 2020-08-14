@@ -21,6 +21,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ProductsComponent } from './pages/products/products.component';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableModule} from "@angular/material/table";
+import {LoginGuardService} from "./guard/login-guard.service";
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import {MatTableModule} from "@angular/material/table";
   ],
   providers: [
     AuthGuardService,
+    LoginGuardService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
