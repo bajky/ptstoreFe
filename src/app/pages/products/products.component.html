@@ -31,18 +31,18 @@
 
       <div class="card-body">
         <div class="mat-elevation-z8">
-          <table mat-table [dataSource]="dataSource" style="width: 100%">
+          <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChange()" style="width: 100%">
 
             <!-- Date Column -->
             <ng-container matColumnDef="productName">
-              <th mat-header-cell *matHeaderCellDef>Product Name</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Name</th>
               <td mat-cell *matCellDef="let product"> {{product.productName}} </td>
             </ng-container>
 
             <!-- total price Column -->
             <ng-container matColumnDef="price">
-              <th mat-header-cell *matHeaderCellDef>Price</th>
-              <td mat-cell *matCellDef="let product"> {{product.price}} </td>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+              <td mat-cell *matCellDef="let product"> {{product.price | number :'1.1-2' | currency : "€"}} </td>
             </ng-container>
 
             <!-- total price Column -->
@@ -62,21 +62,20 @@
               <th mat-header-cell *matHeaderCellDef>Action</th>
               <td mat-cell *matCellDef="let product">
                 <div class="row">
-                  <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="addToBasket(product._links.self.href)">
+                  <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="addToBasket(product)">
                     <i class="nc-icon nc-simple-add"></i>
                   </a>
-                  <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="removeFromBasket(product._links.self.href)">
+                  <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="removeFromBasket(product)">
                     <i class="nc-icon nc-simple-delete"></i>
                   </a>
                 </div>
               </td>
             </ng-container>
 
-            <!-- total price Column -->
             <ng-container matColumnDef="amount" *ngIf="this.authService.isAuthenticated()">
               <th mat-header-cell *matHeaderCellDef>Amount</th>
               <td mat-cell *matCellDef="let product"
-                  class="text-right"> {{getAmountByUrl(product._links.self.href)}} </td>
+                  class="text-right"> {{getAmountByUrl(product)}} </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -89,9 +88,12 @@
             [pageSize]="page.pageSize"
             [length]="page.length">
           </mat-paginator>
-          <div *ngIf="this.authService.isAuthenticated()" class="row">
-            <div class="col-md-12">
-              <input type="button" (click)="createOrder()" class="btn-default pull-right mb-md-2 mr-md-2" value="Order">
+          <div *ngIf="this.authService.isAuthenticated()" class="row d-flex justify-content-center h-100 align-items-center">
+            <div class="col-md-10 flex ">
+              <span class="pull-right text-black-50 font-weight-bold">Total Price is: {{getTotalPrice() | number : '1.1-2' | currency : "€"}}</span>
+            </div>
+            <div class="col-md-2">
+              <input type="button" (click)="createOrder()" class="btn btn-primary pull-right mb-md-2 mr-md-2" value="Order">
             </div>
           </div>
         </div>

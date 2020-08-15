@@ -3,22 +3,37 @@
   </div>
   <div class="col-md-12">
     <div class="card card-user">
+      <div *ngIf="showSuccessMsg" class="alert alert-primary alert-dismissible fade show">
+        <button (click)="closeSuccessMsg()" type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+          <i class="nc-icon nc-simple-remove"></i>
+        </button>
+        <span> User information updated successfully </span>
+      </div>
+      <div *ngIf="showErrorMsg" class="alert alert-danger alert-dismissible fade show">
+        <button (click)="closeErrorMsg()" type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+          <i class="nc-icon nc-simple-remove"></i>
+        </button>
+        <span> User cannot be updated </span>
+      </div>
       <div class="card-header">
         <h5 class="card-title">Edit Profile</h5>
       </div>
       <div class="card-body">
-        <form>
+        <form [formGroup]="formGrp" (ngSubmit)="onUpdateUser()">
           <div class="row">
             <div class="col-md-6 pr-1">
               <div class="form-group">
                 <label>Username</label>
-                <input type="text" class="form-control" [(ngModel)]="user.userName" name="userName">
+                <input formControlName="userName" type="text" class="form-control" [(ngModel)]="user.userName" name="userName">
               </div>
             </div>
             <div class="col-md-6 pl-1">
               <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
-                <input id="exampleInputEmail1" type="email" name="email" [(ngModel)]="user.email" class="form-control" placeholder="Email">
+                <input formControlName="email" id="exampleInputEmail1" type="email" name="email" [(ngModel)]="user.email" class="form-control" placeholder="Email">
+                <div *ngIf="this.validationService.isFieldValid(formGrp, 'email')" style="color: red">
+                  Invalid email
+                </div>
               </div>
             </div>
           </div>
@@ -26,13 +41,19 @@
             <div class="col-md-6 pr-1">
               <div class="form-group">
                 <label for="firstName">First Name</label>
-                <input type="text" class="form-control" id="firstName" name="firstName" [(ngModel)]="user.firstName">
+                <input formControlName="firstName" type="text" class="form-control" id="firstName" name="firstName" [(ngModel)]="user.firstName">
+                <div *ngIf="this.validationService.isFieldValid(formGrp, 'firstName')" style="color: red">
+                  First name is required.
+                </div>
               </div>
             </div>
             <div class="col-md-6 pl-1">
               <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" class="form-control" name="lastName" [(ngModel)]="user.lastName">
+                <input formControlName="lastName" type="text" class="form-control" name="lastName" [(ngModel)]="user.lastName">
+                <div *ngIf="this.validationService.isFieldValid(formGrp, 'lastName')" style="color: red">
+                  Last name is required.
+                </div>
               </div>
             </div>
           </div>

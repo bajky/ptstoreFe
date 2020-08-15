@@ -19,7 +19,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.formGrp = new FormGroup({
       firstName: new FormControl('', [
-        Validators.required
+        Validators.required,
+        Validators.min(3)
       ]),
       lastName: new FormControl('', [
         Validators.required
@@ -28,10 +29,12 @@ export class RegisterComponent implements OnInit {
         Validators.required
       ]),
       email: new FormControl('', [
-        Validators.required
+        Validators.required,
+        Validators.email
       ]),
       password: new FormControl('', [
-        Validators.required
+        Validators.required,
+        Validators.min(8)
       ])
     })
   }
@@ -45,7 +48,6 @@ export class RegisterComponent implements OnInit {
     this.userService.registerUser(this.createUser()).subscribe(() => {
       this.router.navigate(['/login'])
     }, () => {
-      console.log('fail');
     })
   }
 

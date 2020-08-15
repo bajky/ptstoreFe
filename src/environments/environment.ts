@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://pts123.azurewebsites.net',
+  apiUrl: 'https://pts123.azurewebsites.net',
   defaultPageSize: 10,
   assetsPath: ''
 };
