@@ -29,7 +29,7 @@ export class AuthService {
 
   login(userName: string, password: string) {
     let token: string = window.btoa(userName + ':' + password);
-    return this.http.get<any>(`${environment.apiUrl}/api/users/search/findByUserName?userName=${userName}`, {headers: {Authorization: `Basic ${token}`}})
+      return this.http.get<any>(`${environment.apiUrl}/auth/login`, {headers: {Authorization: `Basic ${token}`}})
       .pipe(map((user: User) => {
         user.token = token;
         localStorage.setItem('user', JSON.stringify(user));
@@ -39,9 +39,15 @@ export class AuthService {
   }
 
   logout() {
-    // remove user from local storage to log user out
     localStorage.removeItem('user');
     this.userSubject.next(null);
     this.router.navigate(['/login']);
+  }
+
+  updateUserInfo(user: User) {
+    let previousVal = this.userValue
+    user.token = previousVal.token;
+    localStorage.setItem('user', JSON.stringify(user));
+    this.userSubject.next(user);
   }
 }

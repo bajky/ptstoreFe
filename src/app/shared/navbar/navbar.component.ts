@@ -10,7 +10,7 @@ import {AuthService} from "../../service/auth/auth.service";
     templateUrl: 'navbar.component.html'
 })
 
-export class NavbarComponent implements OnInit{
+export class NavbarComponent implements OnInit {
     private listTitles: any[];
     location: Location;
     private nativeElement: Node;
@@ -76,7 +76,9 @@ export class NavbarComponent implements OnInit{
               mainPanel.style.position = '';
             }, 500);
           }
-          this.toggleButton.classList.remove('toggled');
+          if (this.toggleButton) {
+            this.toggleButton.classList.remove('toggled');
+          }
           this.sidebarVisible = false;
           html.classList.remove('nav-open');
       };

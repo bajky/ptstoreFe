@@ -22,6 +22,7 @@ import { ProductsComponent } from './pages/products/products.component';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableModule} from "@angular/material/table";
 import {LoginGuardService} from "./guard/login-guard.service";
+import {MatSortModule} from "@angular/material/sort";
 
 
 @NgModule({
@@ -32,22 +33,23 @@ import {LoginGuardService} from "./guard/login-guard.service";
     RegisterComponent,
     ProductsComponent
   ],
-  imports: [
-    BrowserAnimationsModule,
-    RouterModule.forRoot(AppRoutes, {
-      useHash: true
-    }),
-    HttpClientModule,
-    SidebarModule,
-    NavbarModule,
-    ToastrModule.forRoot(),
-    FooterModule,
-    FixedPluginModule,
-    FormsModule,
-    MatPaginatorModule,
-    MatTableModule,
-    ReactiveFormsModule
-  ],
+    imports: [
+        BrowserAnimationsModule,
+        RouterModule.forRoot(AppRoutes, {
+            useHash: true
+        }),
+        HttpClientModule,
+        SidebarModule,
+        NavbarModule,
+        ToastrModule.forRoot(),
+        FooterModule,
+        FixedPluginModule,
+        FormsModule,
+        MatPaginatorModule,
+        MatTableModule,
+        ReactiveFormsModule,
+        MatSortModule
+    ],
   providers: [
     AuthGuardService,
     LoginGuardService,

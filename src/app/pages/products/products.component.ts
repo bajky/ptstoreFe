@@ -10,6 +10,7 @@ import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 import {OrderService} from "../../service/order/order.service";
 import {AuthService} from "../../service/auth/auth.service";
 import {Router} from "@angular/router";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-products',
@@ -17,7 +18,7 @@ import {Router} from "@angular/router";
 })
 export class ProductsComponent implements OnInit {
 
-  products: string[] = [];
+  products: Product[] = [];
   changed = new Subject<string>();
   displayedColumns: string[] = ['productName', 'price', 'category', 'description'];
   dynamicColumns = ['actions', 'amount']
@@ -35,6 +36,7 @@ export class ProductsComponent implements OnInit {
   showInfo = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(private productService: ProductService,
               private changeDetectorRefs: ChangeDetectorRef,
               private orderService: OrderService,
@@ -42,8 +44,10 @@ export class ProductsComponent implements OnInit {
               private authService: AuthService) { }
 
   ngOnInit(): void {
-    console.log(this.router.url.indexOf('dashbosard'));
     this.dataSource = new MatTableDataSource<Product>();
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
     this.getData(0, environment.defaultPageSize);
     if (this.authService.isAuthenticated()) {
       this.dynamicColumns.forEach(column => this.displayedColumns.push(column));
@@ -54,7 +58,7 @@ export class ProductsComponent implements OnInit {
   }
 
   getData(page:number, size: number) {
-    this.productService.getProducts(page, size, this.filters).subscribe((resource: Resource) => {
+    this.productService.getProducts(page, size, this.filters, this.sort ? this.sort : {}).subscribe((resource: Resource) => {
       this.dataSource = new MatTableDataSource<Product>(resource._embedded.products);
       this.changeDetectorRefs.detectChanges();
 
@@ -72,23 +76,29 @@ export class ProductsComponent implements OnInit {
     this.changed.next(event);
   }
 
-  addToBasket(productUrl: string) {
-    this.products.push(productUrl);
+  addToBasket(product: Product) {
+    this.products.push(product);
   }
 
-  removeFromBasket(productUrl: string) {
-    let index = this.products.indexOf(productUrl);
+  removeFromBasket(toRemove: Product) {
+    let index = this.products.findIndex(product => product._links.self.href === toRemove._links.self.href);
     this.products.splice(index, 1);
   }
 
   createOrder() {
-    this.orderService.createOrder(this.products).subscribe((data: Resource) => {
+    let productLinks = this.products.map(product => product._links.self.href);
+    this.orderService.createOrder(productLinks).subscribe((data: Resource) => {
       this.showInfo = true;
-    }, (error) => this.showDanger = true);
+    }, () => this.showDanger = true);
   }
 
-  getAmountByUrl(productUri): number {
-    return this.products.filter(item => item == productUri).length;
+  getAmountByUrl(searchingProd: Product): number {
+    return this.products.filter(product => product._links.self.href == searchingProd._links.self.href).length;
+  }
+
+  getTotalPrice() {
+    return this.products.map(product => product.price)
+      .reduce((a, b) => a + b, 0);
   }
 
   closeDanger() {
@@ -97,5 +107,9 @@ export class ProductsComponent implements OnInit {
 
   closeInfo() {
     this.showInfo = false;
+  }
+
+  sortChange() {
+    this.getData(this.page.pageIndex, this.page.pageSize);
   }
 }
