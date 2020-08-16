@@ -36,7 +36,9 @@
             <!-- Date Column -->
             <ng-container matColumnDef="productName">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Name</th>
-              <td mat-cell *matCellDef="let product"> {{product.productName}} </td>
+              <td mat-cell *matCellDef="let product">
+                <a href="javascript:void(0)" (click)="onProductClick(product)">{{product.productName}}</a>
+              </td>
             </ng-container>
 
             <!-- total price Column -->
@@ -90,7 +92,7 @@
           </mat-paginator>
           <div *ngIf="this.authService.isAuthenticated()" class="row d-flex justify-content-center h-100 align-items-center">
             <div class="col-md-10 flex ">
-              <span class="pull-right text-black-50 font-weight-bold">Total Price is: {{getTotalPrice() | number : '1.1-2' | currency : "€"}}</span>
+              <span class="pull-right text-black-50 font-weight-bold">Total Price is: {{getTotalPrice() | number : '1.1-2' | currency : '€'}}</span>
             </div>
             <div class="col-md-2">
               <input type="button" (click)="createOrder()" class="btn btn-primary pull-right mb-md-2 mr-md-2" value="Order">
