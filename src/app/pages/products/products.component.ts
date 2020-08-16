@@ -112,4 +112,8 @@ export class ProductsComponent implements OnInit {
   sortChange() {
     this.getData(this.page.pageIndex, this.page.pageSize);
   }
+
+  onProductClick(product: Product) {
+    this.router.navigate(['/dashboard/productdetail'], {state: {product: product}})
+  }
 }

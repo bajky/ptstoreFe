@@ -23,6 +23,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableModule} from "@angular/material/table";
 import {LoginGuardService} from "./guard/login-guard.service";
 import {MatSortModule} from "@angular/material/sort";
+import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {MatSortModule} from "@angular/material/sort";
     AdminLayoutComponent,
     LoginComponent,
     RegisterComponent,
-    ProductsComponent
+    ProductsComponent,
+    ProductDetailComponent
   ],
     imports: [
         BrowserAnimationsModule,
